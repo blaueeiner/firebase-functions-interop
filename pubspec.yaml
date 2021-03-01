@@ -5,7 +5,7 @@ homepage: https://www.github.com/pulyaevskiy/firebase-functions-interop
 author: Anatoly Pulyaevskiy <anatoly.pulyaevskiy@gmail.com>
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   js: ^0.6.1+1
@@ -13,7 +13,8 @@ dependencies:
   node_interop: ^1.0.3
   node_io: ^1.0.1+2
   node_http: ^1.0.0
-  firebase_admin_interop: ^2.0.0
+  firebase_admin_interop:
+    git: https://github.com/blaueeiner/firebase-admin-interop.git
 
 dev_dependencies:
   test: ^1.12.0
