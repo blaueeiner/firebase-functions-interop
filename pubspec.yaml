@@ -14,7 +14,9 @@ dependencies:
   node_io: ^1.0.1+2
   node_http: ^1.0.0
   firebase_admin_interop:
-    git: https://github.com/blaueeiner/firebase-admin-interop.git
+    git:
+      url: https://github.com/blaueeiner/firebase-admin-interop.git
+      ref: master
 
 dev_dependencies:
   test: ^1.12.0
