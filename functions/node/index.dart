@@ -1,8 +1,11 @@
 // Copyright (c) 2017, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:firebase_functions_interop/firebase_functions_interop.dart';
 
 void main() {
@@ -12,12 +15,10 @@ void main() {
   functions['makeUppercase'] =
       functions.database.ref('/tests/{testId}/original').onWrite(makeUppercase);
 
-  functions['firestoreUppercase'] = functions.firestore
-      .document('tests/uppercase')
-      .onWrite(firestoreUppercase);
+  functions['firestoreUppercase'] =
+      functions.firestore.document('tests/uppercase').onWrite(firestoreUppercase);
 
-  functions['pubsubToDatabase'] =
-      functions.pubsub.topic('testTopic').onPublish(pubsubToDatabase);
+  functions['pubsubToDatabase'] = functions.pubsub.topic('testTopic').onPublish(pubsubToDatabase);
 }
 
 FutureOr<void> httpsTests(ExpressHttpRequest request) {
@@ -87,9 +88,7 @@ FutureOr<void> httpsToDatabase(ExpressHttpRequest request) async {
       var admin = FirebaseAdmin.instance;
       var app = admin.initializeApp();
       var database = app.database();
-      await database
-          .ref('/tests/httpsToDatabase/original')
-          .setValue(name.toUpperCase());
+      await database.ref('/tests/httpsToDatabase/original').setValue(name.toUpperCase());
       request.response.writeln('httpsToDatabase: ok');
     }
   } catch (e) {
@@ -123,8 +122,7 @@ FutureOr<void> httpsToFirestore(ExpressHttpRequest request) async {
   }
 }
 
-FutureOr<void> makeUppercase(
-    Change<DataSnapshot<String>> change, EventContext context) {
+FutureOr<void> makeUppercase(Change<DataSnapshot<String>> change, EventContext context) {
   var data = change.after;
   var original = data.val();
   var pushId = context.params['testId'];
@@ -133,8 +131,7 @@ FutureOr<void> makeUppercase(
   return data.ref.parent.child('uppercase').setValue(uppercase);
 }
 
-FutureOr<void> firestoreUppercase(
-    Change<DocumentSnapshot> change, EventContext context) {
+FutureOr<void> firestoreUppercase(Change<DocumentSnapshot> change, EventContext context) {
   if (!change.after.exists) {
     print('Skipping uppercase because document was deleted.');
     return null;

@@ -1,6 +1,8 @@
 // Copyright (c) 2018, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 @TestOn('node')
 import 'dart:async';
 import 'dart:js';
@@ -26,15 +28,9 @@ void main() {
       var exitCode = await exec(command);
       expect(exitCode, 0);
 
-      var snapshot = await app
-          .database()
-          .ref('/tests/pubsubToDatabase')
-          .once<String>('value');
+      var snapshot = await app.database().ref('/tests/pubsubToDatabase').once<String>('value');
       while (snapshot.val() != payload) {
-        snapshot = await app
-            .database()
-            .ref('/tests/pubsubToDatabase')
-            .once<String>('value');
+        snapshot = await app.database().ref('/tests/pubsubToDatabase').once<String>('value');
       }
       expect(snapshot.val(), payload);
     }, timeout: const Timeout(const Duration(seconds: 20)));
@@ -43,8 +39,7 @@ void main() {
 
 Future<int> exec(String command) {
   Completer<int> completer = new Completer<int>();
-  childProcess.exec(command, new ExecOptions(),
-      allowInterop((error, stdout, stderr) {
+  childProcess.exec(command, new ExecOptions(), allowInterop((error, stdout, stderr) {
     int result = (error == null) ? 0 : error.code;
     print(stdout);
     if (error != null) {

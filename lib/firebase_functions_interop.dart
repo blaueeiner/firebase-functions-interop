@@ -1,6 +1,8 @@
 // Copyright (c) 2017, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 /// Interop library for Firebase Functions Node.js SDK.
 ///
 /// Use [functions] object as main entry point.
@@ -45,8 +47,7 @@ import 'src/express.dart';
 export 'package:firebase_admin_interop/firebase_admin_interop.dart';
 export 'package:node_io/node_io.dart' show HttpRequest, HttpResponse;
 
-export 'src/bindings.dart'
-    show CloudFunction, HttpsFunction, EventAuthInfo, RuntimeOptions;
+export 'src/bindings.dart' show CloudFunction, HttpsFunction, EventAuthInfo, RuntimeOptions;
 export 'src/express.dart';
 
 part 'src/https.dart';
@@ -57,10 +58,8 @@ final js.FirebaseFunctions _module = require('firebase-functions');
 /// Cloud functions.
 final FirebaseFunctions functions = FirebaseFunctions._(_module);
 
-typedef DataEventHandler<T> = FutureOr<void> Function(
-    T data, EventContext context);
-typedef ChangeEventHandler<T> = FutureOr<void> Function(
-    Change<T> data, EventContext context);
+typedef DataEventHandler<T> = FutureOr<void> Function(T data, EventContext context);
+typedef ChangeEventHandler<T> = FutureOr<void> Function(Change<T> data, EventContext context);
 
 /// Global namespace for Firebase Cloud Functions functionality.
 ///
@@ -173,8 +172,8 @@ class Change<T> {
 ///   * Authorization of the request that triggered the event, if applicable
 ///     and available.
 class EventContext {
-  EventContext._(this.auth, this.authType, this.eventId, this.eventType,
-      this.params, this.resource, this.timestamp);
+  EventContext._(this.auth, this.authType, this.eventId, this.eventType, this.params, this.resource,
+      this.timestamp);
 
   factory EventContext(js.EventContext data) {
     return new EventContext._(
@@ -223,8 +222,7 @@ class DatabaseFunctions {
   DatabaseFunctions._(this._functions);
 
   /// Returns reference builder for specified [path] in Realtime Database.
-  RefBuilder ref(String path) =>
-      new RefBuilder._(_functions.database.ref(path));
+  RefBuilder ref(String path) => new RefBuilder._(_functions.database.ref(path));
 }
 
 /// The Firebase Realtime Database reference builder.
@@ -277,8 +275,8 @@ class RefBuilder {
     return 0;
   }
 
-  dynamic _handleChangeEvent<T>(js.Change<js.DataSnapshot> data,
-      js.EventContext jsContext, ChangeEventHandler<DataSnapshot<T>> handler) {
+  dynamic _handleChangeEvent<T>(js.Change<js.DataSnapshot> data, js.EventContext jsContext,
+      ChangeEventHandler<DataSnapshot<T>> handler) {
     var after = new DataSnapshot<T>(data.after);
     var before = new DataSnapshot<T>(data.before);
     var context = new EventContext(jsContext);
@@ -322,8 +320,7 @@ class DocumentBuilder {
 
   /// Event handler that fires every time data is updated in Cloud Firestore.
   js.CloudFunction onUpdate(ChangeEventHandler<DocumentSnapshot> handler) {
-    dynamic wrapper(
-            js.Change<js.DocumentSnapshot> data, js.EventContext context) =>
+    dynamic wrapper(js.Change<js.DocumentSnapshot> data, js.EventContext context) =>
         _handleChangeEvent(data, context, handler);
     return nativeInstance.onUpdate(allowInterop(wrapper));
   }
@@ -331,8 +328,7 @@ class DocumentBuilder {
   /// Event handler that fires every time a Cloud Firestore write of any
   /// kind (creation, update, or delete) occurs.
   js.CloudFunction onWrite(ChangeEventHandler<DocumentSnapshot> handler) {
-    dynamic wrapper(
-            js.Change<js.DocumentSnapshot> data, js.EventContext context) =>
+    dynamic wrapper(js.Change<js.DocumentSnapshot> data, js.EventContext context) =>
         _handleChangeEvent(data, context, handler);
     return nativeInstance.onWrite(allowInterop(wrapper));
   }
@@ -350,8 +346,8 @@ class DocumentBuilder {
     return 0;
   }
 
-  dynamic _handleChangeEvent(js.Change<js.DocumentSnapshot> data,
-      js.EventContext jsContext, ChangeEventHandler<DocumentSnapshot> handler) {
+  dynamic _handleChangeEvent(js.Change<js.DocumentSnapshot> data, js.EventContext jsContext,
+      ChangeEventHandler<DocumentSnapshot> handler) {
     final firestore = new Firestore(data.after.ref.firestore);
     var after = new DocumentSnapshot(data.after, firestore);
     var before = new DocumentSnapshot(data.before, firestore);
@@ -370,8 +366,7 @@ class PubsubFunctions {
 
   PubsubFunctions._(this._functions);
 
-  TopicBuilder topic(String path) =>
-      new TopicBuilder._(_functions.pubsub.topic(path));
+  TopicBuilder topic(String path) => new TopicBuilder._(_functions.pubsub.topic(path));
 
   ScheduleBuilder schedule(String expression) =>
       new ScheduleBuilder._(_functions.pubsub.schedule(expression));
@@ -390,8 +385,8 @@ class TopicBuilder {
     return nativeInstance.onPublish(allowInterop(wrapper));
   }
 
-  dynamic _handleEvent(js.Message jsData, js.EventContext jsContext,
-      DataEventHandler<Message> handler) {
+  dynamic _handleEvent(
+      js.Message jsData, js.EventContext jsContext, DataEventHandler<Message> handler) {
     final message = new Message(jsData);
     final context = new EventContext(jsContext);
     var result = handler(message, context);
@@ -411,13 +406,11 @@ class ScheduleBuilder {
 
   /// Event handler that fires every time a schedule occurs.
   js.CloudFunction onRun(DataEventHandler<Message> handler) {
-    dynamic wrapper(js.EventContext jsContext) =>
-        _handleEvent(jsContext, handler);
+    dynamic wrapper(js.EventContext jsContext) => _handleEvent(jsContext, handler);
     return nativeInstance.onRun(allowInterop(wrapper));
   }
-    
-  dynamic _handleEvent(js.EventContext jsContext,
-      DataEventHandler<Null> handler) {
+
+  dynamic _handleEvent(js.EventContext jsContext, DataEventHandler<Null> handler) {
     final context = new EventContext(jsContext);
     var result = handler(null, context);
     if (result is Future) {
@@ -453,8 +446,7 @@ class StorageFunctions {
   StorageFunctions._(this._functions);
 
   /// Registers a Cloud Function scoped to a specific storage [bucket].
-  BucketBuilder bucket(String path) =>
-      new BucketBuilder._(_functions.storage.bucket(path));
+  BucketBuilder bucket(String path) => new BucketBuilder._(_functions.storage.bucket(path));
 
   /// Registers a Cloud Function scoped to the default storage bucket for the project.
   ObjectBuilder object() => new ObjectBuilder._(_functions.storage.object());
@@ -624,21 +616,18 @@ class ObjectMetadata {
   String get storageClass => nativeInstance.storageClass;
 
   /// The creation time of this object.
-  DateTime get timeCreated => nativeInstance.timeCreated == null
-      ? null
-      : DateTime.parse(nativeInstance.timeCreated);
+  DateTime get timeCreated =>
+      nativeInstance.timeCreated == null ? null : DateTime.parse(nativeInstance.timeCreated);
 
   /// The deletion time of this object.
   ///
   /// Returned only if this version of the object has been deleted.
-  DateTime get timeDeleted => nativeInstance.timeDeleted == null
-      ? null
-      : DateTime.parse(nativeInstance.timeDeleted);
+  DateTime get timeDeleted =>
+      nativeInstance.timeDeleted == null ? null : DateTime.parse(nativeInstance.timeDeleted);
 
   /// The modification time of this object.
-  DateTime get updated => nativeInstance.updated == null
-      ? null
-      : DateTime.parse(nativeInstance.updated);
+  DateTime get updated =>
+      nativeInstance.updated == null ? null : DateTime.parse(nativeInstance.updated);
 }
 
 class CustomerEncryption {
@@ -679,8 +668,8 @@ class UserBuilder {
     return nativeInstance.onDelete(allowInterop(wrapper));
   }
 
-  dynamic _handleEvent(js.UserRecord jsData, js.EventContext jsContext,
-      DataEventHandler<UserRecord> handler) {
+  dynamic _handleEvent(
+      js.UserRecord jsData, js.EventContext jsContext, DataEventHandler<UserRecord> handler) {
     final data = new UserRecord(jsData);
     final context = new EventContext(jsContext);
     var result = handler(data, context);

@@ -1,7 +1,10 @@
 // Copyright (c) 2017, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 import 'dart:async';
+
 import 'package:firebase_functions_interop/firebase_functions_interop.dart';
 
 void main() {
@@ -15,18 +18,15 @@ void main() {
   functions['helloWorld'] = functions.https.onRequest(helloWorld);
   functions['makeUppercase'] =
       functions.database.ref('/tests/{testId}/original').onWrite(makeUppercase);
-  functions['makeNamesUppercase'] = functions.firestore
-      .document('/users/{userId}')
-      .onWrite(makeNamesUppercase);
-  functions['logPubsub'] =
-      functions.pubsub.topic('my-topic').onPublish(logPubsub);
+  functions['makeNamesUppercase'] =
+      functions.firestore.document('/users/{userId}').onWrite(makeNamesUppercase);
+  functions['logPubsub'] = functions.pubsub.topic('my-topic').onPublish(logPubsub);
   functions['logStorage'] = functions.storage.object().onFinalize(logStorage);
   functions['logAuth'] = functions.auth.user().onCreate(logAuth);
 }
 
 /// Example Realtime Database function.
-FutureOr<void> makeUppercase(
-    Change<DataSnapshot<String>> change, EventContext context) {
+FutureOr<void> makeUppercase(Change<DataSnapshot<String>> change, EventContext context) {
   final DataSnapshot<String> snapshot = change.after;
   var original = snapshot.val();
   var pushId = context.params['testId'];
@@ -36,8 +36,7 @@ FutureOr<void> makeUppercase(
 }
 
 /// Example Firestore
-FutureOr<void> makeNamesUppercase(
-    Change<DocumentSnapshot> change, EventContext context) {
+FutureOr<void> makeNamesUppercase(Change<DocumentSnapshot> change, EventContext context) {
   // Since this is an update of the same document we must guard against
   // infinite cycle of this function writing, reading and writing again.
   final snapshot = change.after;

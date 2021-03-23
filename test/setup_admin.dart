@@ -1,14 +1,15 @@
 // Copyright (c) 2017, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 import 'dart:convert';
 
 import 'package:firebase_admin_interop/firebase_admin_interop.dart';
 import 'package:node_interop/node.dart';
 import 'package:node_interop/util.dart';
 
-final Map<String, String> env =
-    new Map<String, String>.from(dartify(process.env));
+final Map<String, String> env = new Map<String, String>.from(dartify(process.env));
 
 App initFirebaseApp() {
   if (!env.containsKey('FIREBASE_CONFIG') ||
@@ -24,8 +25,8 @@ App initFirebaseApp() {
   );
   final Map config = jsonDecode(env['FIREBASE_CONFIG']);
   final databaseUrl = config['databaseURL'];
-  return FirebaseAdmin.instance.initializeApp(
-      new AppOptions(credential: cert, databaseURL: databaseUrl));
+  return FirebaseAdmin.instance
+      .initializeApp(new AppOptions(credential: cert, databaseURL: databaseUrl));
 //
 //  if (!env.containsKey('FIREBASE_SERVICE_ACCOUNT_FILEPATH') ||
 //      !env.containsKey('FIREBASE_DATABASE_URL') ||

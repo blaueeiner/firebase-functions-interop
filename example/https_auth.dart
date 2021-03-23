@@ -1,9 +1,12 @@
 // Copyright (c) 2018, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 import 'dart:async';
-import 'package:firebase_functions_interop/firebase_functions_interop.dart';
+
 import 'package:firebase_admin_interop/firebase_admin_interop.dart';
+import 'package:firebase_functions_interop/firebase_functions_interop.dart';
 
 void main() {
   functions['secured'] = functions.https.onRequest(secured);

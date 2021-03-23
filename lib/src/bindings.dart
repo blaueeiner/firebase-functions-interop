@@ -1,12 +1,14 @@
 // Copyright (c) 2017, Anatoly Pulyaevskiy. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+// @dart=2.9
+
 @JS()
 library firebase_functions_interop.bindings;
 
+import 'package:firebase_admin_interop/js.dart' as admin;
 import 'package:js/js.dart';
 import 'package:node_interop/http.dart';
-import 'package:firebase_admin_interop/js.dart' as admin;
 
 export 'package:firebase_admin_interop/js.dart';
 
@@ -15,6 +17,7 @@ export 'package:firebase_admin_interop/js.dart';
 abstract class RuntimeOptions {
   /// Timeout for the function in seconds.
   external int get timeoutSeconds;
+
   /// Amount of memory to allocate to the function.
   ///
   /// Valid values are: '128MB', '256MB', '512MB', '1GB', and '2GB'.
@@ -158,8 +161,7 @@ abstract class HttpsFunctions {
   /// The event handler is called with Express Request and Response objects as its
   /// only arguments.
   external HttpsFunction onRequest(HttpRequestListener handler);
-  external HttpsFunction onCall(
-      dynamic handler(dynamic data, CallableContext context));
+  external HttpsFunction onCall(dynamic handler(dynamic data, CallableContext context));
 }
 
 @JS()
@@ -194,13 +196,11 @@ abstract class DatabaseFunctions {
 abstract class RefBuilder {
   /// Event handler that fires every time new data is created in Firebase
   /// Realtime Database.
-  external CloudFunction onCreate(
-      dynamic handler(admin.DataSnapshot data, EventContext context));
+  external CloudFunction onCreate(dynamic handler(admin.DataSnapshot data, EventContext context));
 
   /// Event handler that fires every time data is deleted from Firebase Realtime
   /// Database.
-  external CloudFunction onDelete(
-      dynamic handler(admin.DataSnapshot data, EventContext context));
+  external CloudFunction onDelete(dynamic handler(admin.DataSnapshot data, EventContext context));
 
   /// Event handler that fires every time data is updated in Firebase Realtime
   /// Database.
@@ -236,14 +236,12 @@ abstract class DocumentBuilder {
 
   /// Event handler that fires every time data is updated in Cloud Firestore.
   external CloudFunction onUpdate(
-      dynamic handler(
-          Change<admin.DocumentSnapshot> data, EventContext context));
+      dynamic handler(Change<admin.DocumentSnapshot> data, EventContext context));
 
   /// Event handler that fires every time a Cloud Firestore write of any kind
   /// (creation, update, or delete) occurs.
   external CloudFunction onWrite(
-      dynamic handler(
-          Change<admin.DocumentSnapshot> data, EventContext context));
+      dynamic handler(Change<admin.DocumentSnapshot> data, EventContext context));
 }
 
 @JS()
@@ -262,8 +260,7 @@ abstract class PubsubFunctions {
 @anonymous
 abstract class TopicBuilder {
   /// Event handler that fires every time an event is publish in Pubsub.
-  external CloudFunction onPublish(
-      dynamic handler(Message data, EventContext context));
+  external CloudFunction onPublish(dynamic handler(Message data, EventContext context));
 }
 
 /// The Pubsub schedule builder interface.
@@ -271,8 +268,7 @@ abstract class TopicBuilder {
 @anonymous
 abstract class ScheduleBuilder {
   /// Event handler that fires every time a schedule occurs.
-  external CloudFunction onRun(
-      dynamic handler(EventContext context));
+  external CloudFunction onRun(dynamic handler(EventContext context));
 }
 
 /// Interface representing a Google Cloud Pub/Sub message.
@@ -319,8 +315,7 @@ abstract class ObjectBuilder {
   /// This event indicates that the live version of an object has become an
   /// archived version, either because it was archived or because it was
   /// overwritten by the upload of an object of the same name.
-  external CloudFunction onArchive(
-      void handler(ObjectMetadata data, EventContext context));
+  external CloudFunction onArchive(void handler(ObjectMetadata data, EventContext context));
 
   /// Event handler which fires every time a Google Cloud Storage deletion
   /// occurs.
@@ -330,8 +325,7 @@ abstract class ObjectBuilder {
   /// configuration. For buckets with object versioning enabled, this is not
   /// sent when an object is archived, even if archival occurs via the
   /// storage.objects.delete method.
-  external CloudFunction onDelete(
-      void handler(ObjectMetadata data, EventContext context));
+  external CloudFunction onDelete(void handler(ObjectMetadata data, EventContext context));
 
   /// Event handler which fires every time a Google Cloud Storage object
   /// creation occurs.
@@ -339,13 +333,11 @@ abstract class ObjectBuilder {
   /// Sent when a new object (or a new generation of an existing object) is
   /// successfully created in the bucket. This includes copying or rewriting an
   /// existing object. A failed upload does not trigger this event.
-  external CloudFunction onFinalize(
-      void handler(ObjectMetadata data, EventContext context));
+  external CloudFunction onFinalize(void handler(ObjectMetadata data, EventContext context));
 
   /// Event handler which fires every time the metadata of an existing object
   /// changes.
-  external CloudFunction onMetadataUpdate(
-      void handler(ObjectMetadata data, EventContext context));
+  external CloudFunction onMetadataUpdate(void handler(ObjectMetadata data, EventContext context));
 }
 
 /// Interface representing a Google Google Cloud Storage object metadata object.
@@ -451,12 +443,10 @@ abstract class AuthFunctions {
 @anonymous
 abstract class UserBuilder {
   /// Event handler that fires every time a Firebase Authentication user is created.
-  external CloudFunction onCreate(
-      void handler(UserRecord data, EventContext context));
+  external CloudFunction onCreate(void handler(UserRecord data, EventContext context));
 
   /// Event handler that fires every time a Firebase Authentication user is deleted.
-  external CloudFunction onDelete(
-      void handler(UserRecord data, EventContext context));
+  external CloudFunction onDelete(void handler(UserRecord data, EventContext context));
 }
 
 /// Interface representing a user.

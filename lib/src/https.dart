@@ -1,3 +1,5 @@
+// @dart=2.9
+
 part of firebase_functions_interop;
 
 /// To send an error from an HTTPS Callable function to a client, throw an
@@ -90,8 +92,7 @@ class HttpsError {
   final dynamic details;
 
   dynamic _toJsHttpsError() {
-    return callConstructor(
-        _module.https.HttpsError, [code, message, jsify(details)]);
+    return callConstructor(_module.https.HttpsError, [code, message, jsify(details)]);
   }
 }
 
@@ -144,8 +145,7 @@ class HttpsFunctions {
   /// instance of [HttpsError], then the error details are sent back to the
   /// client. If this handler throws any other kind of error, then the client
   /// receives an error of type [HttpsError.internal].
-  js.HttpsFunction onCall(
-      FutureOr<dynamic> handler(dynamic data, CallableContext context)) {
+  js.HttpsFunction onCall(FutureOr<dynamic> handler(dynamic data, CallableContext context)) {
     dynamic jsHandler(data, js.CallableContext context) {
       var auth = context.auth;
       var ctx = new CallableContext(
