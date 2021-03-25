@@ -13,17 +13,17 @@ dependencies:
   meta: ^1.3.0
   node_interop:
     git:
-      url: https://github.com/blaueeiner/node-interop
+      url: https://github.com/blaueeiner/node-interop.git
       path: ./node_interop/
       ref: master
   node_io:
     git:
-      url: https://github.com/blaueeiner/node-interop
+      url: https://github.com/blaueeiner/node-interop.git
       path: ./node_io/
       ref: master
   node_http:
     git:
-      url: https://github.com/blaueeiner/node-interop
+      url: https://github.com/blaueeiner/node-interop.git
       path: ./node_http/
       ref: master
   firebase_admin_interop:
