@@ -15,17 +15,17 @@ dependencies:
     git:
       url: https://github.com/blaueeiner/node-interop
       path: ./node_interop/
-      ref: feature/update-dependencies
+      ref: master
   node_io:
     git:
       url: https://github.com/blaueeiner/node-interop
       path: ./node_io/
-      ref: feature/update-dependencies
+      ref: master
   node_http:
     git:
       url: https://github.com/blaueeiner/node-interop
       path: ./node_http/
-      ref: feature/update-dependencies
+      ref: master
   firebase_admin_interop:
     git:
       url: https://github.com/blaueeiner/firebase-admin-interop.git
